@@ -15,27 +15,16 @@ def make_dict():
     return [dict(zip(key_list, value_list[i])) for i in range(len(lines))]
 
 
-def print_data(name:str, cp:str, dict_list:list):   
+def get_data(cp:str, dict_list:list) -> dict:   
     for idx in range(len(dict_list)):
         aux : dict = dict_list[idx]
         if cp == aux.get('d_codigo'):
             break
-    
-    data:dict = dict_list[idx]
-    
-    print('Nombre: ', name)
-    print('C.P.: ', cp)    
-    print('Colonia: ', data.get('d_asenta'))
-    print('Estado: ', data.get('d_estado'))
-    print('Municipio: ', data.get('d_mnpio'))
-    
-    if data.get('d_ciudad'):
-        print('Ciudad: ', data.get('d_ciudad'))
-    
-    return (data, name, cp)
+       
+    return dict_list[idx]
 
 
-def make_file(info):
+def make_file(info: tuple):
     data, name, cp = info
     
     parent_dir = r'C:\\Users\\ellio\\OneDrive\\Documentos\\Visual Studio Code\\Codigos_postales' 
@@ -61,15 +50,3 @@ def make_file(info):
         if data.get('d_ciudad'):
             cd = data.get('d_ciudad')
             f.write(f'Ciudad: {cd}\n')    
-    
-
-def main():
-    name = input("Ingrese su nombre: ")
-    cp = input("Ingrese su codigo postal: ")
-
-    info = print_data(name, cp, make_dict())
-    make_file(info)
-
-
-if __name__ == '__main__':
-    main()
