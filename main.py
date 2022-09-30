@@ -24,18 +24,10 @@ def get_data(cp:str, dict_list:list) -> dict:
     return dict_list[idx]
 
 
-def make_file(info: tuple):
-    data, name, cp = info
+def make_file(name: str, cp: str, data: dict, directory: str):
+    parent_dir = path.join(directory, cp)
     
-    parent_dir = r'C:\\Users\\ellio\\OneDrive\\Documentos\\Visual Studio Code\\Codigos_postales' 
-    directory = path.join(parent_dir, cp)
-    
-    try:
-        mkdir(directory)
-    except OSError:
-        print(f"\nEl directorio {cp} ya existe\n")
-    
-    file_name = f'{directory}\\{name}.txt'
+    file_name = f'{parent_dir}\\{name}.txt'
     col = data.get('d_asenta')
     est = data.get('d_estado')
     mun = data.get('d_mnpio')
@@ -49,4 +41,16 @@ def make_file(info: tuple):
         
         if data.get('d_ciudad'):
             cd = data.get('d_ciudad')
-            f.write(f'Ciudad: {cd}\n')    
+            f.write(f'Ciudad: {cd}\n')
+
+
+def check_directory(cp:str, parent_dir: str):
+    directory = path.join(parent_dir, cp)
+    message = ''
+
+    try:
+        mkdir(directory)
+    except OSError:
+        message = f"El directorio {cp} ya existe"
+
+    return message 
