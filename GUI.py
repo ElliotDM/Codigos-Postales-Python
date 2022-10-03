@@ -1,6 +1,4 @@
-from tkinter import *
 from tkinter import Tk, ttk, StringVar, Text, filedialog, messagebox
-from tkinter import font
 from main import get_data, make_dict, make_file, check_directory
 
 
@@ -11,8 +9,7 @@ class Interface(ttk.Frame):
         self.root.iconbitmap('icons\\zip-code.ico')
         self.root.resizable(0,0)
 
-        self.frame = ttk.Frame(self.root, borderwidth=2, 
-                    relief="raised", padding=(5,5))
+        self.frame = ttk.Frame(self.root, borderwidth=2, relief='raised', padding=(5,5))
 
         self.label1 = ttk.Label(self.frame, text='Nombre:', padding=(5,5))
         self.label2 = ttk.Label(self.frame, text='C.P.:', padding=(5,5))
@@ -23,30 +20,33 @@ class Interface(ttk.Frame):
         self.textbox1 = ttk.Entry(self.frame, textvariable=self.name, width=30)
         self.textbox2 = ttk.Entry(self.frame, textvariable=self.cp, width=30)
 
-        self.label3 = ttk.Label(self.frame, text='Colonia: ', padding=(5,5))
-        self.combobox = ttk.Combobox(self.frame, width=27, state="readonly")
+        self.label3 = ttk.Label(self.frame, text='Colonia:', padding=(5,5))
+        self.combobox = ttk.Combobox(self.frame, width=27, state='READONLY')
 
         self.button1 = ttk.Button(self.frame, text='Buscar', padding=(5,5), command=self.search)
         self.button2 = ttk.Button(self.frame, text='Aceptar', padding=(5,5), command=self.make_selection)
 
+        self.separator = ttk.Separator(self.frame, orient='horizontal')
+
         self.label4 = ttk.Label(self.frame, text='Previsualizacion', padding=(5,5))
         
-        self.textarea = Text(self.frame, height=10, width=30, padx=5, pady=5, state=DISABLED)
+        self.textarea = Text(self.frame, height=10, width=30, padx=5, pady=5, state='disable')
 
         self.button3 = ttk.Button(self.frame, text='Guardar', padding=(5,5), command=self.choose_dir)
 
-        self.frame.grid(column=0, row=0)
-        self.label1.grid(column=0, row=0)
-        self.textbox1.grid(column=1,row=0, columnspan=3)
-        self.label2.grid(column=0, row=1)
-        self.textbox2.grid(column=1, row=1, columnspan=3)
-        self.label3.grid(column=0, row=3)
-        self.combobox.grid(column=1, row=3, columnspan=3)
-        self.button1.grid(column=1,row=4)
-        self.button2.grid(column=2,row=4)
-        self.label4.grid(column=1, row=5)
-        self.textarea.grid(column=0, row=6, columnspan=3)
-        self.button3.grid(column=1, row=8)
+        self.frame.grid(row=0, column=0)
+        self.label1.grid(row=0, column=0)
+        self.textbox1.grid(row=0, column=1, columnspan=3)
+        self.label2.grid(row=1, column=0)
+        self.textbox2.grid(row=1, column=1, columnspan=3)
+        self.label3.grid(row=3, column=0)
+        self.combobox.grid(row=3, column=1, columnspan=3)
+        self.button1.grid(row=4, column=1)
+        self.button2.grid(row=4, column=2)
+        self.separator.grid(row=6, columnspan=3, sticky='we', pady=(5,5))
+        self.label4.grid(row=7, column=1)
+        self.textarea.grid(row=8, column=0, columnspan=3)
+        self.button3.grid(row=10, column=1, pady=(5,5))
 
         self.textbox1.focus_set()
         self.root.mainloop() 
@@ -72,19 +72,19 @@ class Interface(ttk.Frame):
         municipio = selection.get('d_mnpio')
         ciudad = selection.get('d_ciudad')
 
-        self.textarea.configure(state=NORMAL)
-        self.textarea.delete('1.0', END)
+        self.textarea.configure(state='normal')
+        self.textarea.delete('1.0', 'END')
     
         if selection.get('d_ciudad') == '':
-            self.textarea.configure(state=NORMAL)
+            self.textarea.configure(state='normal')
             self.textarea.insert('1.0', f'Nombre: {self.name.get()}\nC.P.: {self.cp.get()}\nColonia: {colonia}\nEstado: {estado}\nMunicipio: {municipio}')
-            self.textarea.configure(state=DISABLED)
+            self.textarea.configure(state='disable')
 
             return
 
-        self.textarea.configure(state=NORMAL)
+        self.textarea.configure(state='normal')
         self.textarea.insert('1.0', f'Nombre: {self.name.get()}\nC.P.: {self.cp.get()}\nColonia: {colonia}\nEstado: {estado}\nMunicipio: {municipio}\nCiudad: {ciudad}')
-        self.textarea.configure(state=DISABLED)
+        self.textarea.configure(state='disable')
         
     def add_options(self, data:list):
         colonias = [data[idx].get('d_asenta') for idx in range(len(data))]
@@ -96,7 +96,7 @@ class Interface(ttk.Frame):
             return
 
         parent_dir = filedialog.askdirectory()
-        data = self.textarea.get('1.0', END)
+        data = self.textarea.get('1.0', 'END')
         
         if not check_directory(self.cp.get(), parent_dir):
             messagebox.showwarning('Atencion', f'El directorio {self.cp.get()} ya existe')
