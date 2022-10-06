@@ -1,7 +1,7 @@
-from os import mkdir, path
+from os import makedirs, path
 
 
-def make_dict():
+def make_dict() -> list:
     with open("CP.txt", 'r', encoding='UTF-8') as file:
         lines = file.readlines()
 
@@ -28,21 +28,11 @@ def get_data(cp:str, dict_list:list) -> list:
     return similarly
 
 
-def make_file(name: str, cp: str, data: str, directory: str):
-    parent_dir = path.join(directory, cp)
-    file_name = f'{parent_dir}\\{name}.txt'
-     
-    with open(file_name, 'w', encoding='UTF-8') as f:
-        f.write(f'{data}')
-
-
-def check_directory(cp:str, parent_dir: str):
+def make_file(name: str, cp: str, data: str, parent_dir: str):
     directory = path.join(parent_dir, cp)
-    aux = True
 
-    try:
-        mkdir(directory)
-    except OSError:
-        aux = False
-
-    return aux
+    if not path.exists(directory):
+        makedirs(cp)
+     
+    with open(f'{directory}\\{name}.txt', 'w', encoding='UTF-8') as file:
+        file.write(f'{data}')
